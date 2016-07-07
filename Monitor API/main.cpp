@@ -1,25 +1,67 @@
 #include <windows.h>
+#include <HighLevelMonitorConfigurationAPI.h>
 #include <iostream>
+#include <vector>
+
+//TEMPORARY TESTING, WILL BE OOP LATER
 
 int main(int, char**);
-void processCommandLine(int argc, char** argv);
+BOOL CALLBACK MonitorEnumCallback(
+	_In_ HMONITOR hMonitor,
+	_In_ HDC      hdcMonitor,
+	_In_ LPRECT   lprcMonitor,
+	_In_ LPARAM   dwData
+);
 
+//Array of monitor handles
+std::vector<HMONITOR> monitors;
+
+
+BOOL CALLBACK monitorEnumCallback(
+	_In_ HMONITOR hMonitor,
+	_In_ HDC      hdcMonitor,
+	_In_ LPRECT   lprcMonitor,
+	_In_ LPARAM   dwData
+)
+{
+	monitors.push_back(hMonitor);
+	return TRUE;
+}
 
 int main(int argc, char **argv)
 {
-	processCommandLine(argc, argv);
-
-
-	return 0;
-}
-
-void processCommandLine(int argc, char **argv)
-{
-	std::cout << "No command line arguments are handled currently";
-	std::cout << "These were the passed in args:";
-
-	for (int i = 1; i < argc; i++)
+	//Find any connected monitors
+	if (EnumDisplayMonitors(NULL, NULL, monitorEnumCallback, NULL) == 0)
 	{
-		std::cout << argv[i];
+		//TODO: Proper Error checking
+		std::cout << "Could not find Monitor Handles" << std::endl;
 	}
+
+	//Display monitor details
+	for (UINT16 currentMonitor = 0; currentMonitor < monitors.size(); ++currentMonitor)
+	{
+		HMONITOR monitor = monitors[currentMonitor];
+		
+		MONITORINFOEX monitorInfo;
+		monitorInfo.cbSize = sizeof(MONITORINFOEX); //Need to set this to allow next function to identify Structure type
+
+		if (GetMonitorInfo(monitor, &monitorInfo) == 0)
+		{
+			std::cout << "Monitor " << currentMonitor << " is not providing info" << std::endl;
+		}
+		else 
+		{
+			std::cout << "Monitor " << currentMonitor << ":" << std::endl;
+			if (monitorInfo.dwFlags == MONITORINFOF_PRIMARY)
+			{
+				std::cout << "Is Primary Monitor" << std::endl;
+			}
+			std::cout << "Name: " << monitorInfo.szDevice << std::endl;
+		}
+
+		
+	}
+
+	
+	return 0;
 }
