@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <HighLevelMonitorConfigurationAPI.h>
+#include <PhysicalMonitorEnumerationAPI.h>
 #include <iostream>
 #include <vector>
 
@@ -15,7 +16,7 @@ BOOL CALLBACK MonitorEnumCallback(
 
 //Array of monitor handles
 std::vector<HMONITOR> monitors;
-
+std::vector<LPPHYSICAL_MONITOR> pMonitors;
 
 BOOL CALLBACK monitorEnumCallback(
 	_In_ HMONITOR hMonitor,
@@ -59,9 +60,33 @@ int main(int argc, char **argv)
 			std::cout << "Name: " << monitorInfo.szDevice << std::endl;
 		}
 
+		DWORD monCount = 0;
+		GetNumberOfPhysicalMonitorsFromHMONITOR(monitor, &monCount);
+
+		LPPHYSICAL_MONITOR pMonitor = (LPPHYSICAL_MONITOR)malloc(monCount * sizeof(PHYSICAL_MONITOR));
+
+		GetPhysicalMonitorsFromHMONITOR(monitor, monCount, pMonitor);
 		
+
+
+		DWORD minBright = 0;
+		DWORD maxBright = 0;
+		DWORD currentBright = 0;
+		if (GetMonitorBrightness(pMonitor[0].hPhysicalMonitor, &minBright, &currentBright, &maxBright) == FALSE)
+		{
+			std::cout << "error: " << GetLastError() << std::endl;
+		}
+
+		std::cout << std::endl << "Minimum Brightness: " << minBright << std::endl;
+		std::cout << "Current Brightness: " << currentBright << std::endl;
+		std::cout << "Maximum Brightness: " << maxBright << std::endl;
+		
+		SetMonitorBrightness(pMonitor[0].hPhysicalMonitor, 100);
+		
+		//pMonitors.push_back(pMonitor);
 	}
 
 	
+
 	return 0;
 }
