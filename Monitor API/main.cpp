@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 	for (UINT16 currentMonitor = 0; currentMonitor < monitors.size(); ++currentMonitor)
 	{
 		HMONITOR monitor = monitors[currentMonitor];
-		
+		/*
 		MONITORINFOEX monitorInfo;
 		monitorInfo.cbSize = sizeof(MONITORINFOEX); //Need to set this to allow next function to identify Structure type
 
@@ -67,7 +67,9 @@ int main(int argc, char **argv)
 
 		GetPhysicalMonitorsFromHMONITOR(monitor, monCount, pMonitor);
 		
-
+		DWORD capFlags;
+		DWORD capColFlags;
+		GetMonitorCapabilities(pMonitor[0].hPhysicalMonitor, &capFlags, &capColFlags);
 
 		DWORD minBright = 0;
 		DWORD maxBright = 0;
@@ -81,9 +83,10 @@ int main(int argc, char **argv)
 		std::cout << "Current Brightness: " << currentBright << std::endl;
 		std::cout << "Maximum Brightness: " << maxBright << std::endl;
 		
-		SetMonitorBrightness(pMonitor[0].hPhysicalMonitor, 100);
+		SetMonitorBrightness(pMonitor[0].hPhysicalMonitor, 0);
 		
 		//pMonitors.push_back(pMonitor);
+		*/
 	}
 
 	
