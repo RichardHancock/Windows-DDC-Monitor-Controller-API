@@ -9,14 +9,6 @@ class Monitor {
 
 public:
 
-	Monitor(HMONITOR nonPhysicalMonitor);
-
-	~Monitor();
-
-	bool isValid();
-
-	
-
 	enum ColourTemps {
 		Temp4000k,
 		Temp5000k,
@@ -29,13 +21,24 @@ public:
 		ENUM_ITEM_COUNT = 8
 	};
 
+
+	Monitor(HMONITOR nonPhysicalMonitor);
+
+	~Monitor();
+
+	bool isValid();
+
+	std::string getName();
+
+	void printCapabilities();
+
 protected:
 
 	PHYSICAL_MONITOR monitorPointer;
 
 	std::string name;
 
-	std::string getName();
+	
 
 	bool valid;
 

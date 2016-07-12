@@ -8,6 +8,8 @@ Monitor::Monitor(HMONITOR nonPhysicalMonitor)
 	primaryMonitor = false;
 	valid = false;
 	name = "Undefined";
+	capabilities = 0;
+	colourCapabilities = 0;
 
 	//Populate colourFlags array
 	colourFlags[Temp4000k] = MC_SUPPORTED_COLOR_TEMPERATURE_4000K;
@@ -37,17 +39,49 @@ Monitor::Monitor(HMONITOR nonPhysicalMonitor)
 	name = nameRaw;
 
 	delete nameRaw;
+
+	getCapabilities();
 }
 
 Monitor::~Monitor()
 {
 	//Release Handles
+	DestroyPhysicalMonitor(monitorPointer.hPhysicalMonitor);
 }
 
 
 std::string Monitor::getName()
 {
 	return name;
+}
+
+void Monitor::printCapabilities()
+{
+	std::cout << "Capabilities:" << std::endl;
+	std::cout << "	Brightness: " << supportsBrightness() << std::endl;
+	std::cout << "	Contrast: " << supportsContrast() << std::endl;
+	std::cout << "	Degauss: " << supportsDegauss() << std::endl;
+	std::cout << "	Display Area Position: " << supportsDisplayAreaPosition() << std::endl;
+	std::cout << "	Display Area Size: " << supportsDisplayAreaSize() << std::endl;
+	std::cout << "	Technology Type: " << supportsTechnologyType() << std::endl;
+	std::cout << "	RGB Drive: " << supportsRGBDrive() << std::endl;
+	std::cout << "	RGB Gain: " << supportsRGBGain() << std::endl;
+	std::cout << "	Restore Colour Defaults: " << supportsRestoreColourDefaults() << std::endl;
+	std::cout << "	Restore Defaults: " << supportsRestoreDefaults() << std::endl;
+	std::cout << "	Restore Defaults Extended: " << supportsRestoreDefaultEX() << std::endl;
+
+	std::cout << "	Colour Temperature: " << supportsColourTemperature() << std::endl;
+	if (supportsColourTemperature())
+	{
+		std::cout << "		4000k: " << supportsSpecificColourTemperature(Temp4000k) << std::endl;
+		std::cout << "		5000k: " << supportsSpecificColourTemperature(Temp5000k) << std::endl;
+		std::cout << "		6500k: " << supportsSpecificColourTemperature(Temp6500k) << std::endl;
+		std::cout << "		7500k: " << supportsSpecificColourTemperature(Temp7500k) << std::endl;
+		std::cout << "		8200k: " << supportsSpecificColourTemperature(Temp8200k) << std::endl;
+		std::cout << "		9300k: " << supportsSpecificColourTemperature(Temp9300k) << std::endl;
+		std::cout << "		10000k: " << supportsSpecificColourTemperature(Temp10000k) << std::endl;
+		std::cout << "		11500k: " << supportsSpecificColourTemperature(Temp11500k) << std::endl;
+	}
 }
 
 bool Monitor::initialiseMonitor(HMONITOR nonPhysicalMonitor)
@@ -91,7 +125,7 @@ bool Monitor::initialiseMonitor(HMONITOR nonPhysicalMonitor)
 
 bool Monitor::isValid()
 {
-	return isValid;
+	return valid;
 }
 
 bool Monitor::getCapabilities()

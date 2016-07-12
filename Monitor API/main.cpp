@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 
+#include "Monitor.h"
+
 //TEMPORARY TESTING, WILL BE OOP LATER
 
 int main(int, char**);
@@ -15,8 +17,7 @@ BOOL CALLBACK MonitorEnumCallback(
 );
 
 //Array of monitor handles
-std::vector<HMONITOR> monitors;
-std::vector<LPPHYSICAL_MONITOR> pMonitors;
+std::vector<HMONITOR> monitorsRaw;
 
 BOOL CALLBACK monitorEnumCallback(
 	_In_ HMONITOR hMonitor,
@@ -25,12 +26,14 @@ BOOL CALLBACK monitorEnumCallback(
 	_In_ LPARAM   dwData
 )
 {
-	monitors.push_back(hMonitor);
+	//HMONITORS don't need to be freed or memory managed
+	monitorsRaw.push_back(hMonitor);
 	return TRUE;
 }
 
 int main(int argc, char **argv)
 {
+
 	//Find any connected monitors
 	if (EnumDisplayMonitors(NULL, NULL, monitorEnumCallback, NULL) == 0)
 	{
@@ -38,58 +41,48 @@ int main(int argc, char **argv)
 		std::cout << "Could not find Monitor Handles" << std::endl;
 	}
 
+	std::vector<Monitor*> monitors;
+
 	//Display monitor details
-	for (UINT16 currentMonitor = 0; currentMonitor < monitors.size(); ++currentMonitor)
+	for (UINT16 currentMonitor = 0; currentMonitor < monitorsRaw.size(); ++currentMonitor)
 	{
-		HMONITOR monitor = monitors[currentMonitor];
-		/*
-		MONITORINFOEX monitorInfo;
-		monitorInfo.cbSize = sizeof(MONITORINFOEX); //Need to set this to allow next function to identify Structure type
-
-		if (GetMonitorInfo(monitor, &monitorInfo) == 0)
+		Monitor* newMonitor = new Monitor(monitorsRaw[currentMonitor]);
+		if (!newMonitor->isValid())
 		{
-			std::cout << "Monitor " << currentMonitor << " is not providing info" << std::endl;
+			//handle Error
 		}
-		else 
+		else
 		{
-			std::cout << "Monitor " << currentMonitor << ":" << std::endl;
-			if (monitorInfo.dwFlags == MONITORINFOF_PRIMARY)
-			{
-				std::cout << "Is Primary Monitor" << std::endl;
-			}
-			std::cout << "Name: " << monitorInfo.szDevice << std::endl;
+			monitors.push_back(newMonitor);
+			std::cout << newMonitor->getName() << " Connected" << std::endl;
+			newMonitor->printCapabilities();
 		}
-
-		DWORD monCount = 0;
-		GetNumberOfPhysicalMonitorsFromHMONITOR(monitor, &monCount);
-
-		LPPHYSICAL_MONITOR pMonitor = (LPPHYSICAL_MONITOR)malloc(monCount * sizeof(PHYSICAL_MONITOR));
-
-		GetPhysicalMonitorsFromHMONITOR(monitor, monCount, pMonitor);
-		
-		DWORD capFlags;
-		DWORD capColFlags;
-		GetMonitorCapabilities(pMonitor[0].hPhysicalMonitor, &capFlags, &capColFlags);
-
-		DWORD minBright = 0;
-		DWORD maxBright = 0;
-		DWORD currentBright = 0;
-		if (GetMonitorBrightness(pMonitor[0].hPhysicalMonitor, &minBright, &currentBright, &maxBright) == FALSE)
-		{
-			std::cout << "error: " << GetLastError() << std::endl;
-		}
-
-		std::cout << std::endl << "Minimum Brightness: " << minBright << std::endl;
-		std::cout << "Current Brightness: " << currentBright << std::endl;
-		std::cout << "Maximum Brightness: " << maxBright << std::endl;
-		
-		SetMonitorBrightness(pMonitor[0].hPhysicalMonitor, 0);
-		
-		//pMonitors.push_back(pMonitor);
-		*/
 	}
 
 	
+	//Clean Up
+	for (Monitor* monitor : monitors)
+	{
+		delete monitor;
+	}
+	monitors.clear();
+	monitorsRaw.clear();
 
 	return 0;
 }
+
+/* Brightness Function (Tested Working needs integration to Class)
+DWORD minBright = 0;
+DWORD maxBright = 0;
+DWORD currentBright = 0;
+if (GetMonitorBrightness(pMonitor[0].hPhysicalMonitor, &minBright, &currentBright, &maxBright) == FALSE)
+{
+std::cout << "error: " << GetLastError() << std::endl;
+}
+
+std::cout << std::endl << "Minimum Brightness: " << minBright << std::endl;
+std::cout << "Current Brightness: " << currentBright << std::endl;
+std::cout << "Maximum Brightness: " << maxBright << std::endl;
+
+SetMonitorBrightness(pMonitor[0].hPhysicalMonitor, 0);
+*/
