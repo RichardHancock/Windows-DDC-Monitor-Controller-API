@@ -26,5 +26,8 @@
     <ClInclude Include="Monitor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ContinuousSetting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
