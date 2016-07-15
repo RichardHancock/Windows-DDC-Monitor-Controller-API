@@ -6,40 +6,11 @@
 #include <string>
 
 #include "ContinuousSetting.h"
+#include "MonitorEnums.h"
 
 class Monitor {
 
 public:
-
-	enum ColourTemps 
-	{
-		Temp4000k,
-		Temp5000k,
-		Temp6500k,
-		Temp7500k,
-		Temp8200k,
-		Temp9300k,
-		Temp10000k,
-		Temp11500k,
-		ENUM_TEMP_COUNT = 8,
-		UnknownTemp = -1
-	};
-
-	enum TechnologyType
-	{
-		ShadowMaskCRT,
-		ApertureGrillCRT,
-		ThinFilmTransistor,
-		LiquidCrystalOnSilicon,
-		Plasma,
-		OLED,
-		Electroluminescent,
-		Microelectromechanical,
-		FieldEmissionDevice,
-		ENUM_TYPE_COUNT = 9,
-		UnknownType = -1
-	};
-
 
 	Monitor(HMONITOR nonPhysicalMonitor);
 
@@ -62,11 +33,11 @@ public:
 	bool saveSettings();
 
 	//Get Setting Values (I won't cache these as they can change via external influences (Monitor controls))
-	ContinuousSetting getBrightness();
+	ContinuousSetting* getBrightness();
 
-	ColourTemps getColourTemperature();
+	ColourTemps* getColourTemperature();
 
-	ContinuousSetting getContrast();
+	ContinuousSetting* getContrast();
 
 	bool getDisplayAreaPosition();
 
@@ -76,7 +47,23 @@ public:
 
 	bool getRGBGain();
 
-	TechnologyType getTechnologyType();
+	TechnologyType* getTechnologyType();
+
+	//Set Setting
+	bool setBrightness(unsigned long newValue);
+
+	bool setColourTemperature(ColourTemps newValue);
+
+	bool setContrast(unsigned long newValue);
+
+	bool setDisplayAreaPosition();
+
+	bool setDisplayAreaSize();
+
+	bool setRGBDrive();
+
+	bool setRGBGain();
+
 
 protected:
 
@@ -130,4 +117,13 @@ protected:
 	bool supportsSpecificColourTemperature(ColourTemps colourTemperature);
 
 	unsigned long colourFlags[ColourTemps::ENUM_TEMP_COUNT];
+
+	MC_COLOR_TEMPERATURE colourTempToRawColour(ColourTemps colour);
+
+	ColourTemps rawColourToColourTemp(MC_COLOR_TEMPERATURE colour);
+
+
+	MC_DISPLAY_TECHNOLOGY_TYPE techTypeToRawTech(TechnologyType tech);
+
+	TechnologyType rawTechToTechType(MC_DISPLAY_TECHNOLOGY_TYPE tech);
 };

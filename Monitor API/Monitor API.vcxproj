@@ -120,6 +120,7 @@
   <ItemGroup>
     <ClInclude Include="ContinuousSetting.h" />
     <ClInclude Include="Monitor.h" />
+    <ClInclude Include="MonitorEnums.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

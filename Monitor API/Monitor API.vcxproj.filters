@@ -29,5 +29,8 @@
     <ClInclude Include="ContinuousSetting.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MonitorEnums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
