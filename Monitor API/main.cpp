@@ -6,8 +6,6 @@
 
 #include "Monitor.h"
 
-//TEMPORARY TESTING, WILL BE OOP LATER
-
 int main(int, char**);
 BOOL CALLBACK MonitorEnumCallback(
 	_In_ HMONITOR hMonitor,
@@ -56,6 +54,9 @@ int main(int argc, char **argv)
 			monitors.push_back(newMonitor);
 			std::cout << newMonitor->getName() << " Connected" << std::endl;
 			newMonitor->printCapabilities();
+
+			//Test Brightness
+			newMonitor->setBrightness(100);
 		}
 	}
 
@@ -70,19 +71,3 @@ int main(int argc, char **argv)
 
 	return 0;
 }
-
-/* Brightness Function (Tested Working needs integration to Class)
-DWORD minBright = 0;
-DWORD maxBright = 0;
-DWORD currentBright = 0;
-if (GetMonitorBrightness(pMonitor[0].hPhysicalMonitor, &minBright, &currentBright, &maxBright) == FALSE)
-{
-std::cout << "error: " << GetLastError() << std::endl;
-}
-
-std::cout << std::endl << "Minimum Brightness: " << minBright << std::endl;
-std::cout << "Current Brightness: " << currentBright << std::endl;
-std::cout << "Maximum Brightness: " << maxBright << std::endl;
-
-SetMonitorBrightness(pMonitor[0].hPhysicalMonitor, 0);
-*/

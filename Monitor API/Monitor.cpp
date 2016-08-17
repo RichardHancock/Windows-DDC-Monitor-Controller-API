@@ -268,7 +268,26 @@ TechnologyType* Monitor::getTechnologyType()
 
 bool Monitor::setBrightness(unsigned long newValue)
 {
-	return false;
+	ContinuousSetting* bright = getBrightness();
+	if (bright == nullptr)
+	{
+		return false;
+	}
+
+	if (!settingChangeCheck(*bright, newValue))
+	{
+		return false;
+	}
+
+	if (SetMonitorBrightness(monitorPointer.hPhysicalMonitor, newValue) == TRUE)
+	{
+		return true;
+	}
+	else
+	{
+		std::cout << getName() << " could not set brightness. Win32 Error Code: " << GetLastError();
+		return false;
+	}
 }
 
 bool Monitor::setColourTemperature(ColourTemps newValue)
@@ -577,4 +596,23 @@ TechnologyType Monitor::rawTechToTechType(MC_DISPLAY_TECHNOLOGY_TYPE tech)
 		return UnknownType;
 		break;
 	}
+}
+
+bool Monitor::settingChangeCheck(ContinuousSetting setting, unsigned long newValue)
+{
+	//Check if new value is between the min/max values
+	if (newValue > setting.max && newValue < setting.min)
+	{
+		std::cout << getName() << ": new value provided is outside of setting boundries";
+		return false;
+	}
+
+	//Check if new value is the same as the current value
+	if (newValue == setting.current)
+	{
+		std::cout << getName() << ": new value is the same as the current setting";
+		return false;
+	}
+
+	return true;
 }

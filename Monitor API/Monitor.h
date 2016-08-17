@@ -126,4 +126,7 @@ protected:
 	MC_DISPLAY_TECHNOLOGY_TYPE techTypeToRawTech(TechnologyType tech);
 
 	TechnologyType rawTechToTechType(MC_DISPLAY_TECHNOLOGY_TYPE tech);
+
+	//Misc
+	bool settingChangeCheck(ContinuousSetting setting, unsigned long newValue);
 };
