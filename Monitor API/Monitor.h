@@ -7,6 +7,7 @@
 
 #include "ContinuousSetting.h"
 #include "MonitorEnums.h"
+#include "IOCTL.h"
 
 class Monitor {
 
@@ -71,7 +72,10 @@ protected:
 
 	std::string name;
 
-	
+	std::string systemName;
+
+	IOCTL* ioctl;
+
 
 	bool valid;
 

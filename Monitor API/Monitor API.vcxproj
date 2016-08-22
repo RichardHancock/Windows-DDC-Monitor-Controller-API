@@ -118,11 +118,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="IOCTL.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Monitor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ContinuousSetting.h" />
+    <ClInclude Include="IOCTL.h" />
     <ClInclude Include="Monitor.h" />
     <ClInclude Include="MonitorEnums.h" />
   </ItemGroup>

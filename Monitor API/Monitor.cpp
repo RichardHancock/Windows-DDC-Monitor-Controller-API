@@ -41,10 +41,19 @@ Monitor::Monitor(HMONITOR nonPhysicalMonitor)
 	delete nameRaw;
 
 	getCapabilities();
+
+	if (!supportsBrightness())
+	{
+		//If standard method does not work try to use IOCTL
+		ioctl = new IOCTL(systemName);
+	}
 }
 
 Monitor::~Monitor()
 {
+	if (ioctl != nullptr)
+		delete ioctl;
+	
 	//Release Handles
 	DestroyPhysicalMonitor(monitorPointer.hPhysicalMonitor);
 }
@@ -343,7 +352,9 @@ bool Monitor::initialiseMonitor(HMONITOR nonPhysicalMonitor)
 			std::cout << "Is Primary Monitor" << std::endl;
 			primaryMonitor = true;
 		}
-		std::cout << "Sys Name: " << monitorInfo.szDevice << std::endl;
+
+		systemName = monitorInfo.szDevice;
+		std::cout << "Sys Name: " << systemName << std::endl;
 	}
 
 	DWORD monCount = 0;

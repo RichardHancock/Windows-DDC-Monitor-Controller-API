@@ -21,6 +21,9 @@
     <ClCompile Include="Monitor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IOCTL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Monitor.h">
@@ -30,6 +33,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MonitorEnums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IOCTL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
