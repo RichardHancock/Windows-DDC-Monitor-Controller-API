@@ -1,3 +1,4 @@
+//ABANDONED See Issue#1
 #include "IOCTL.h"
 
 #include <ntddvdeo.h>
@@ -44,6 +45,7 @@ IOCTL::~IOCTL()
 bool IOCTL::isValid()
 {
 	return valid;
+	
 }
 
 bool IOCTL::getBrightnessCapabilities()
@@ -80,7 +82,7 @@ bool IOCTL::getBrightnessCapabilities()
 	//Loop through output buffer to get all the brightness levels
 	for (unsigned int i = 0; i < *bytesReturned; i++)
 	{
-		std::cout << (INT)outBuffer[i] << " ";
+		capabilities.push_back((INT)outBuffer[i]);
 	}
 
 	return false;

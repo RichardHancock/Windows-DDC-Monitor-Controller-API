@@ -1,3 +1,4 @@
+//ABANDONED See Issue#1
 #pragma once
 
 #include <vector>
@@ -13,6 +14,7 @@ public:
 
 	bool isValid();
 
+	
 protected:
 	HANDLE handle;
 

@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Monitor.h"
+#include "LaptopBrightness.h"
 
 int main(int, char**);
 BOOL CALLBACK MonitorEnumCallback(
@@ -60,6 +61,8 @@ int main(int argc, char **argv)
 		}
 	}
 
+	LaptopBrightness* laptop = new LaptopBrightness();
+	delete laptop;
 	
 	//Clean Up
 	for (Monitor* monitor : monitors)
