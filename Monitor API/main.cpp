@@ -32,6 +32,19 @@ BOOL CALLBACK monitorEnumCallback(
 
 int main(int argc, char **argv)
 {
+	bool argumentProvided = false;
+	unsigned long newBrightness = 0;
+
+	if (argc > 1)
+	{
+		newBrightness = atoi(argv[1]);
+		if (newBrightness < 0 || newBrightness > 100)
+		{
+			return -1;
+		}
+		
+		argumentProvided = true;
+	}
 
 	//Find any connected monitors
 	if (EnumDisplayMonitors(NULL, NULL, monitorEnumCallback, NULL) == 0)
@@ -55,15 +68,18 @@ int main(int argc, char **argv)
 			monitors.push_back(newMonitor);
 			std::cout << newMonitor->getName() << " Connected" << std::endl;
 			newMonitor->printCapabilities();
-
-			//Test Brightness
-			newMonitor->setBrightness(100);
 		}
 	}
 
-	LaptopBrightness* laptop = new LaptopBrightness();
-	delete laptop;
+	//LaptopBrightness* laptop = new LaptopBrightness();
+	//delete laptop;
 	
+	for (Monitor* monitor : monitors)
+	{
+		if (argumentProvided)
+			monitor->setBrightness(newBrightness);
+	}
+
 	//Clean Up
 	for (Monitor* monitor : monitors)
 	{
