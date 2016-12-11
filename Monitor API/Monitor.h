@@ -50,7 +50,21 @@ public:
 
 	TechnologyType* getTechnologyType();
 
-	//Set Setting
+	//Set Settings
+
+	/**
+	 @fn	bool Monitor::setBrightness(unsigned long newValue);
+	
+	 @brief	Sets the brightness.
+	
+	 @author	Richard
+	 @date	07/09/2016
+	
+	 @param	newValue	The new value.
+	
+	 @return	true if it succeeds, false if it fails.
+	 */
+
 	bool setBrightness(unsigned long newValue);
 
 	bool setColourTemperature(ColourTemps newValue);

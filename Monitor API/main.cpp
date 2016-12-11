@@ -67,7 +67,12 @@ int main(int argc, char **argv)
 		{
 			monitors.push_back(newMonitor);
 			std::cout << newMonitor->getName() << " Connected" << std::endl;
-			newMonitor->printCapabilities();
+		
+			
+			#ifndef NDEBUG
+				newMonitor->printCapabilities();
+			#endif
+			
 		}
 	}
 
