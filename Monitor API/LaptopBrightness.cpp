@@ -115,7 +115,7 @@ LaptopBrightness::LaptopBrightness()
 
 	pSvc->Release();
 	pLoc->Release();
-	CoUninitialize;
+	CoUninitialize();
 }
 
 LaptopBrightness::~LaptopBrightness()
